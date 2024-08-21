@@ -1087,7 +1087,7 @@ async function openPlaceOffcanvas(placeid) {
                 <hr style="margin-top: 5px; margin-bottom: 15px;" />`
     if (place.wiki) {
         pane.innerHTML += `<i class="fa-solid fa-globe"
-                        style="width: 20px; font-size: 20px; display: inline-block; margin-right: 3px;"></i> <a href="${place.wiki}">${new URL(place.wiki).host == "peaceful-vanilla-club.fandom.com" ? place.wiki.split("peaceful-vanilla-club.fandom.com/wiki/")[1].replace(/_/gm, " ").split("?")[0] + '<i class="fa-solid fa-up-right-from-square"></i></a> (PVC Wiki)' : place.wiki + '<i class="fa-solid fa-up-right-from-square"></i></a> (⚠️ External Site)'} <br>
+                        style="width: 20px; font-size: 20px; display: inline-block; margin-right: 3px;"></i> <a href="${place.wiki}">${new URL(place.wiki).host == "peaceful-vanilla-club.fandom.com" ? place.wiki.split("peaceful-vanilla-club.fandom.com/wiki/")[1].replace(/_/gm, " ").split("?")[0] + '<i class="fa-solid fa-up-right-from-square"></i></a> (PVC Wiki)' : place.wiki + '<i class="fa-solid fa-up-right-from-square"></i></a> (⚠️ This is an External Site - Not affiliated with Peaceful Vanilla Club or PVC Mapper)'} <br>
                         `
 
         if (new URL(place.wiki).host == "peaceful-vanilla-club.fandom.com") pane.innerHTML += `<button class="btn btn-sm btn-secondary" onclick="document.getElementById('wikiPreview').classList.toggle('hidden')" >Show/Hide Preview <span class="badge bg-primary">BETA</span></button><br><iframe id="wikiPreview" class="hidden" style="width: 100%;" height="400" src="https://breezewiki.com/peaceful-vanilla-club/wiki/${place.wiki.split("/wiki/")[1]}"></iframe>`;
@@ -1190,7 +1190,7 @@ async function openAreaOffcanvas(areaid) {
                 <hr style="margin-top: 5px; margin-bottom: 15px;" />`
     if (area.wiki) {
         pane.innerHTML += `<i class="fa-solid fa-globe"
-                        style="width: 20px; font-size: 20px; display: inline-block; margin-right: 3px;"></i> <a href="${area.wiki}">${new URL(area.wiki).host == "peaceful-vanilla-club.fandom.com" ? area.wiki.split("peaceful-vanilla-club.fandom.com/wiki/")[1].replace(/_/gm, " ").split("?")[0] + '<i class="fa-solid fa-up-right-from-square"></i></a> (PVC Wiki)' : area.wiki + '<i class="fa-solid fa-up-right-from-square"></i></a> (⚠️ External Site)'} <br>
+                        style="width: 20px; font-size: 20px; display: inline-block; margin-right: 3px;"></i> <a href="${area.wiki}">${new URL(area.wiki).host == "peaceful-vanilla-club.fandom.com" ? area.wiki.split("peaceful-vanilla-club.fandom.com/wiki/")[1].replace(/_/gm, " ").split("?")[0] + '<i class="fa-solid fa-up-right-from-square"></i></a> (PVC Wiki)' : area.wiki + '<i class="fa-solid fa-up-right-from-square"></i></a> (⚠️ This is an External Site - Not affiliated with Peaceful Vanilla Club or PVC Mapper)'} <br>
                         `
 
         if (new URL(area.wiki).host == "peaceful-vanilla-club.fandom.com") pane.innerHTML += `<button class="btn btn-sm btn-secondary" onclick="document.getElementById('wikiPreview').classList.toggle('hidden')" >Show/Hide Preview <span class="badge bg-primary">BETA</span></button><br><iframe id="wikiPreview" class="hidden" style="width: 100%;" height="400" src="https://breezewiki.com/peaceful-vanilla-club/wiki/${area.wiki.split("/wiki/")[1]}"></iframe>`;
