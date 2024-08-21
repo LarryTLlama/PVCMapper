@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css" />
+
+    <style>
+        body {
+            margin-left: 10px;
+        }
+        .logotop {
+            z-index: 500;
+            background-color: white;
+            border-radius: 5px;
+            font-size: 25px;
+            font-weight: bolder;
+            padding-right: 10px;
+        }
+        .mainContent {
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logotop">
+        <img src="../assets/images/map.png" height="50" style="margin-right: 5px;" /> PVC Mapper <span
+            style="margin-left: 5px;" class="badge text-bg-primary">BETA</span>
+    </div><br><br>
+    <div class="mainContent" id="top">
+        <strong>Welcome to the help page!</strong><br>
+        Sorry if this wasn't as pretty as you were expecting. It was like midnight when I made this. Will improve it soon!<br><br>
+
+        <strong id="disclaimer">Disclaimer:</strong><br>
+        While I think this website is super cool (because it is 😜), it unfortunately isn't official. I'm technically a "3rd party" to the server.<br>
+        So, the data you send to the PVC Mapper is held on separate servers by a separate person (me, LarryTLlama).<br><br>
+        
+        <strong id="data">Data and the PVC Mapper</strong><br>
+        The data on the Mapper is what makes it the Mapper!<br>
+        The mapper will collect the following data from the PVC website:
+        <ul > 
+            <li > A list of all shopkeepers - We keep a hold of this, and refresh it every hour (to make sure we don't stress the shops viewer out!)</li > 
+            <li > A list of all players - We fetch this every second, and store who's been on, where they were, and when they were last on.</li > 
+            <li > A collection of map tiles - We keep the map tiles in storage to further reduce strain on the main 2D map's resources.</li > 
+        </ul > <br>
+        Here's what we store from *you*:<br>
+        <ul > 
+            <li > What you input during Account Creation - Usernames, and passwords. Although I nor anyone should be able to see your password, we ask that you make it unique *just in case*.</li > 
+            <li > What you input in your Profile - Details including profile poses, unions, timezones, etc...</li > 
+            <li > Session stuff - These keep you logged in, so you don't need to enter your username + password everytime you use the mapper.</li > 
+        </ul > <br>
+        We'll also store these on your device, in the form of cookies:<br>
+        <ul > 
+            <li > Session stuff - Again, these keep you logged in.</li > 
+            <li > Your player UUID - A unique identifier to make sure you are you!</li > 
+            <li > Other choices you make - Things like "Don't show this again". These aren't sent to the Mapper servers.</li > 
+        </ul > <br>
+        We'll also send some data to our 3rd parties:
+        <ul>
+            <li>When you sign up to the Mapper, we use Google Recaptcha to ensure you're not trying to spam us</li>
+            <li>When you search for shops by item, or by location, we'll contact api.pvc-utils.xyz with what you requested</li>
+            <li>We get all our skins from the <a href="https://docs.lunareclipse.studio/">Starlight Skins API</a> which allows us to get bedrock skins super easily</li>
+        </ul>
+        <br><br><br>
+        <strong id="use">Using the mapper</strong><br>
+        The best way to use the mapper is to sign up. This is easy, especially if you sign up while you're in-game!<br>
+        Start by cul cking the profile picture in the searchbar. Then, choose "Sign Up".<br><br>
+        <strong id="signup">Signing Up</strong><br>
+        Signing up is simple. First, make sure you're in-game, as this will make the verification process *much* easier!<br> 
+        Once you're in the Sign-Up menu, enter your in-game username, and choose a unique password.<br>
+        Once you click submit, you'll need to verify. In game, go to the coordinates presented on screen.<br>
+        When you are in the exact spot, click "I'm Here" to verify and create your account. Welcome to the Mapper!<br><br>
+        <strong id="login">Logging back in</strong><br>
+        To log back in, click the profile picture in the searchbar. Then, choose log-in.<br>
+        Enter the same credentials as you did when signing up, and click "Log In" to get back in!<br<br>
+        With your new Mapper account, you can add places, areas and features to the map, as well as customize your player profile and leave reviews!<br><br>
+        <strong id="createLocation">Creating Places - Locations</strong><br>
+        ⚠️ On mobile devices, turn the device landscape to see the map and data fields!<br>
+        To begin with, we'll create an individual location. Head to the menu, and choose "Add a Place". This opens the mapper editor<br>
+        Once the editor loads, make sure to choose if you want a location in the nether or overworld (using the toggle button).<br>
+        For this example, we'll choose the "Location" type. Click the button and begin filling out the fields!<br>
+        A couple things to note:<br>
+        <ul>
+            <li>Clicking on the map where you want your location to be will autofill its coordinates fields!</li>
+            <li>The overall max size is 6MB. However, we only allow images up to 5MB. You might need to compress your images to fit in our servers :)</li>
+            <li>Clicking submit will send you to the location you put on the map, or it'll error and give you big red text. Good luck!</li>
+        </ul><br><br>
+        <strong id="createArea">Creating Places - Areas</strong><br>
+        ⚠️ On mobile devices, turn the device landscape to see the map and data fields!<br>
+        This is mostly the same process. Follow the above steps, but choose "Area" this time.<br>
+        When creating your area, there are noticably less fields to fill out. Do as many as you can!<br>
+        Then, you're ready to create the bounds to your area! Click on the map to add a new corner to your area.<br>
+        If you make a mistake, you can right click to remove the most recent coordinate. Easy!<br><br>
+        <br><br>
+        <strong id="searchbar">Using the searchbar</strong><br>
+        The searchbar is the easiest way to navigate the main mapper page. Simply put in a query and go!<br>
+        <ul>
+            <li>Put in the name of an area or place to find it.</li>
+            <li>Append "User:" to the start of your search to find players.</li>
+            <li>Add "Item:" to the start to find trades by item.</li>
+            <li>Add "Shop:" to the start to find trades by coordinates.</li>
+            <li>Add "Coords:" to the start to navigate to a set of coords.</li>
+        </ul><br><br>
+        <strong id="playerList">Using the Online Now list</strong><br>
+        The "Online Now" list can be found in the main menu.<br>
+        This can be used to access a list of players, their skins, positions, and Mapper profile links of those in game.<br>
+        <br><br>
+        <strong id="contact">Getting help with the Mapper</strong><br>
+        Don't contact staff about the Mapper, as they don't actually have much to do with the creation of it! :O<br>
+        Contact <code>.LarryTLlama</code> in game (or discord ideally) to get help, or report bugs, or just to chat about the Mapper!<br><br>
+        Wow! You made it to the end of the help page! Congrats! 🎉 Have a cookie! 🍪
+    </div>
+</body>

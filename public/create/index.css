@@ -1,0 +1,79 @@
+.logInLoader {
+    text-align: center;
+    width: fit-content;
+}
+
+.logInLoader>i {
+    text-align: center;
+}
+
+.templates {
+    text-align: center;
+}
+
+.templates>div>i {
+    font-size: 40px;
+}
+
+.templateType {
+    margin: 15px;
+    border-radius: 5px;
+    border: 1px solid grey;
+    color: black;
+    text-decoration: none;
+    padding-top: 15px; 
+    padding-bottom: 15px;
+    cursor: pointer;
+}
+
+.templateType>i {
+    font-size: 60px;
+}
+
+.inputs {
+    padding: 16px;
+    height: 100dvh;
+    overflow: auto;
+}
+
+@media screen and (orientation:portrait) {
+    .templateType {
+        width: 90%;
+    }
+}
+
+.maincontent {
+    margin: 0;
+    max-height: 100dvh;
+    width: 100dvw;
+}
+
+body {
+    height: 100dvh;
+}
+
+.hidden {
+    display: none;
+}
+
+#map {
+    height: 100dvh;
+}
+
+@media screen and (orientation : portrait) {
+    #map {
+        height: 50dvh;
+    }
+
+    .inputs {
+        max-height: 50dvh;
+    }
+
+    #createArea {
+        max-height: 50dvh;
+    }
+
+    #createPlace {
+        max-height: 50dvh;
+    }
+}

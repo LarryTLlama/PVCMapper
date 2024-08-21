@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PVC Mapper - Add to the map...</title>
+    <link rel="stylesheet" type="text/css" href="/assets/leaflet/leaflet.css" />
+    <script src="/assets/leaflet/leaflet-src.js"></script>
+
+    <script src="/assets/leaflet/leafletrotate.js"> </script>
+    <link type="text/css" rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css" />
+    <link href="/assets/fontawesome/css/fontawesome.css" rel="stylesheet" />
+    <link href="/assets/fontawesome/css/brands.css" rel="stylesheet" />
+    <link href="/assets/fontawesome/css/solid.css" rel="stylesheet" />
+    <link type="text/css" rel="stylesheet" href="./index.css" />
+</head>
+
+<body>
+    <canvas style="display: none;" id="imageResizer"></canvas>
+    <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Main content -->
+    <div class="row maincontent">
+        <div class="col-md-3 inputs" id="inputs">
+
+            <!-- Content for each type. We just .hidden the ones we dont need :) -->
+            <div id="createPlace" class="hidden">
+                <h5>New Location...</h5>
+                <!-- Name -->
+                <strong>Name of the location</strong><br>
+                <div class="input-group">
+                    <span class="input-group-text">Name</span>
+                    <input id="placeName" type="text" placeholder="My Cool Place" aria-label="Place name"
+                        class="form-control">
+                </div>
+                <!-- Coordinates -->
+                <strong>Coordinates</strong><br>
+                <span>🙋‍♂️ Top tip: Rotate device to landscape and click on the map to autofill these
+                    coordinates!</span>
+                <div class="input-group">
+                    <span class="input-group-text">Coordinates</span>
+                    <input type="number" id="placeX" placeholder="X Coord" aria-label="X" class="form-control">
+                    <input type="number" id="placeZ" placeholder="Z Coord" aria-label="Z" class="form-control">
+                </div>
+                <!-- Description -->
+                <strong>Description</strong><br>
+                <div class="input-group">
+                    <span class="input-group-text">Description</span>
+                    <input id="placeDesc" type="text"
+                        placeholder="My cool place is a place that was officially deemed cool by xX_CoolKid1_Xx in 2022. Since then, its coolness levels have increased with brand new features."
+                        aria-label="Place name" class="form-control">
+                </div>
+                <!-- Image -->
+                <strong>Image</strong><br>
+                <span>Max 5MB. PNG, JPEG or GIFs if you're fancy!</span>
+                <div class="input-group">
+                    <label class="input-group-text" for="inputGroupFile01">Upload</label>
+                    <input type="file" accept="image/*" class="form-control" id="placeImage">
+                </div>
+
+                <!-- Wiki -->
+                <strong>Wiki Page or Website Link</strong><br>
+                <span>We'll pick up a link to a Wiki Page or website!</span><br>
+                <div class="input-group">
+                    <span class="input-group-text">Wiki Page</span>
+                    <input id="placeWiki" type="text"
+                        placeholder="https://peaceful-vanilla-club.fandom.com/wiki/My_Cool_Place"
+                        aria-label="Place name" class="form-control">
+                </div>
+                <!-- Creator -->
+                <strong>Creator of the place</strong><br>
+                <div class="input-group">
+                    <span class="input-group-text">Created By</span>
+                    <input id="placeCreator" type="text" placeholder="xX_CoolKid1_Xx" aria-label="Place name"
+                        class="form-control">
+                </div>
+                <strong>Date Created</strong><br>
+                <span>Unsure? Set both to 0! Set a date in the future to add estimated construction finish.</span>
+                <!-- Date made -->
+                <div class="input-group">
+                    <span class="input-group-text">Created during:</span>
+                    <input id="placeMonth" type="number" placeholder="Month" min="1" max="12" aria-label="X"
+                        class="form-control">
+                    <input id="placeYear" type="number" placeholder="Year" min="2018" max="2030" aria-label="Z"
+                        class="form-control">
+                </div>
+
+                <!-- Type -->
+                <strong>Place type:</strong><br>
+                <span>Choose the most appropriate, or "Miscellaneous" if it doesn't fit any.</span>
+                <select id="placeType" class="form-select" aria-label="Default select example">
+                    <option selected disabled>Select a Place type</option>
+                    <option value="farm">Farm</option>
+                    <option value="shop">Shop</option>
+                    <option value="mall">Shopping Mall</option>
+                    <option value="museum">Museum</option>
+                    <option value="event">Event Area</option>
+                    <option value="pvp">PVP Arena</option>
+                    <option value="base">Player Base</option>
+                    <option value="landmark">Landmark</option>
+                    <option value="lighthouse">Lighthouse</option>
+                    <option value="union">Union HQ/Building</option>
+                    <option value="mapart">Map Art</option>
+                    <option value="town">Village</option>
+                    <option value="misc">Miscellaneous</option>
+                </select>
+                <!-- Features -->
+                <strong>Features</strong><br>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="placePortal" checked>
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Has nether portal - Should be accessible to everyone
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="placeChest" checked>
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Has ender chest - Should be accessible to everyone
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="placePublic" checked>
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Made for public access/use
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="placeHistorical">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Historical (was used, but is no longer used)
+                    </label>
+                </div>
+                <span id="placeError" style="color: red;"></span>
+                <button class="btn btn-success btn-sm" id="addPlaceToMap">Add to map</button>
+            </div>
+
+            <!-- Create an area/region -->
+            <div id="createArea" class="hidden">
+                <h5>New Area...</h5>
+                <!-- Coordinates -->
+                <strong>Coordinates</strong><br>
+                <span>🙋‍♂️ Click on the map to add a point, right click to remove the last one! <a
+                        href="/help/creating#area">Learn More</a></span>
+                <div id="areaVertices" class="areaVertices">
+
+                </div><br>
+                <!-- Name -->
+                <strong>Name of the area</strong><br>
+                <div class="input-group">
+                    <span class="input-group-text">Name</span>
+                    <input id="areaName" type="text" placeholder="My Cool Place" aria-label="Place name"
+                        class="form-control">
+                </div><br>
+                <!-- Description -->
+                <strong>Description</strong><br>
+                <div class="input-group">
+                    <span class="input-group-text">Description</span>
+                    <input id="areaDesc" type="text"
+                        placeholder="My cool place is a place that was officially deemed cool by xX_CoolKid1_Xx in 2022. Since then, its coolness levels have increased with brand new features."
+                        aria-label="Place name" class="form-control">
+                </div><br>
+                <!-- Image -->
+                <strong>Image</strong><br>
+                <span>Max 5MB. PNG, JPEG or GIFs if you're fancy!</span>
+                <div class="input-group">
+                    <label class="input-group-text" for="inputGroupFile01">Upload</label>
+                    <input type="file" accept="image/*" class="form-control" id="areaImage">
+                </div><br>
+
+                <!-- Wiki -->
+                <strong>Wiki Page or Website Link</strong><br>
+                <span>We'll pick up a link to a Wiki Page or website!</span><br>
+                <div class="input-group">
+                    <span class="input-group-text">Wiki Page</span>
+                    <input id="areaWiki" type="text"
+                        placeholder="https://peaceful-vanilla-club.fandom.com/wiki/My_Cool_Place"
+                        aria-label="Place name" class="form-control">
+                </div><br>
+                <!-- Type -->
+                <strong>Area type:</strong><br>
+                <span>Choose the most appropriate, or "Other" if it doesn't fit any.</span>
+                <select id="areaType" class="form-select" aria-label="Default select example">
+                    <option selected disabled>Select a Place type</option>
+                    <option value="town">Town</option>
+                    <option value="region">Map Region</option>
+                    <option value="area">Notable Area</option>
+                    <option value="park">Nature Park</option>
+                    <option value="union">Union area/HQ</option>
+                    <option value="other">Other</option>
+                </select>
+                <span id="areaError" style="color: red;"></span>
+                <button class="btn btn-success btn-sm" id="addAreaToMap">Add to map</button>
+            </div>
+        </div>
+        <div class="col-md-9 map" id="map">
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="chooseEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit a Place</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Enter a place ID below to edit it. Locations begin with "P", areas with "A" and networks with "N".<br>
+                    <input type="text" id="placeToEditID" placeholder="P23" /> <button onclick="spinUpEdit()" class="btn btn-primary btn-sm">Edit that place!</button>
+                </div>
+                <div class="modal-footer" id="editModalFooter">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Are you like really sure?? -->
+    <div class="modal fade" id="areyousure" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Removing a place</h1>
+                </div>
+                <div class="modal-body">
+                    <strong>Are you sure??</strong><br>
+                    <span>Pressing the big red button below will begin the procedure to delete a place.<br>If you created this place originally, it will be removed right away<br>Otherwise a real person need to verify your removal request!<br><br>So, are you positive?</span>
+                </div>
+                <div class="modal-footer">
+                    <span id="removalStatusText"></span>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal" onclick="window.location.reload()">Cancel</button>
+                    <button class="btn btn-danger" onclick="yesiamsure()">Do it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Choose a place to remove -->
+    <div class="modal fade" id="chooseremove" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Removing a place</h1>
+                </div>
+                <div class="modal-body">
+                    Enter the ID of the place you want to remove:
+                    <input type="text" id="removeID" placeholder="A23" /> <button class="btn btn-sm btn-danger" onclick="getPlaceToRemove()">Find Place</button><br>
+                    <span id="findResult"></span>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal" onclick="window.location.reload()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="loginmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Welcome to the Mapper Editor!</h1>
+                </div>
+                <div class="modal-body" id="loginContent">
+                    <span class="logInLoader" id="loginStuff">
+                        <h3>Logging In...
+                            <i class="fa-solid fa-spinner fa-spin-pulse"></i>
+                        </h3>
+                    </span>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="templatemodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Welcome to the Mapper Editor!</h1>
+                </div>
+                <div class="modal-body modal-dialog-scrollable" id="loginContent">
+                    <h5>Get Started by using one of these templates:</h5><br>
+                    <button class="btn btn-sm btn-secondary" id="dimensionswitch">Adding to overworld (Click to switch
+                        to nether)</button><br>
+                    <div class="templates row">
+                        <a class="col-md-3 templateType" id="locationtemplate">
+                            <i class="fa-solid fa-house-flag"></i><br>
+                            <strong>Location</strong><br>
+                            <small>Made for individual buildings, or small towns.</small>
+                        </a>
+                        <a class="col-md-3 templateType" id="areatemplate">
+                            <i class="fa-solid fa-map-location-dot"></i><br>
+                            <strong>Area</strong><br>
+                            <small>Better for larger towns, shopping areas, or union HQs.</small>
+                        </a>
+                        <a class="col-md-3 templateType">
+                            <i class="fa-solid fa-road"></i><br>
+                            <strong>Network</strong><br>
+                            <small><span class="badge text-bg-info">Coming soon!</span>
+                                Used for railways, iceways, well-used paths, or other methods of
+                                transport.</small>
+                        </a>
+                        <a class="col-md-3 templateType" onclick="removeAPlace()">
+
+                            <i class="fa-solid fa-house-circle-xmark"></i><br>
+                            <strong>Remove an Existing Place</strong><br>
+                            <small>Request to delete an existing place</small>
+                        </a>
+                        <a class="col-md-3 templateType" onclick="openEditModal()">
+
+                            <i class="fa-solid fa-file-pen"></i><br>
+                            <strong>Edit an Existing Place</strong><br>
+                            <small>Make corrections/updates to places that are already on the map</small>
+                        </a>
+                        <a href="/help#createLocation" class="col-md-3 templateType">
+                            <i class="fa-solid fa-question"></i><br>
+                            <strong>More Info</strong><br>
+                            <small>Check out the help pages for more info about using the editor.</small>
+                        </a>
+                    </div>
+                    Adding a portal or ender chest? Go back to the map, right click anywhere and choose "Quick Add".
+                    <div class="modal-footer">
+                        Learn more about template types on the <a href="/help/creating#templates">Help Page</a> - <a
+                            href="/"><button class="btn btn-danger btn-sm">Return to map</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        
+
+        <script src="./index.js"></script>
+</body>
+
+</html>

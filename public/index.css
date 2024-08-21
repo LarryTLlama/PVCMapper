@@ -1,0 +1,409 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+body {
+    font-family: "Rubik", sans-serif;
+    height: 100dvh;
+    width: 100dvw;
+    overflow: hidden;
+}
+
+.map {
+    height: 100dvh;
+    width: 100dvw;
+    background-color: lightskyblue;
+}
+
+.searchbar.notactive {
+    transition: height 0.25s;
+    height: 50px;
+}
+
+.searchbar {
+    transition: height 0.25s;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: white;
+    border-radius: 25px;
+    border: solid 1px rgb(134, 134, 134);
+    width: 450px;
+    height: fit-content;
+    z-index: 1500;
+    overflow: hidden;
+}
+
+.searchBarInnerContainer {
+    margin: 4px;
+}
+
+.searchbarinput:focus {
+    outline: none;
+}
+
+.searchbarinput {
+    border: none;
+    margin-left: 16px;
+    height: 24px;
+    width: 80%;
+    display: inline-block;
+}
+
+.leaflet-top {
+    top: 60px;
+}
+
+hr {
+    border-top: 1px solid black;
+    margin-top: 0;
+}
+
+.searchbarinstructions {
+    margin: 10px;
+}
+
+.profileButton {
+    border-radius: 50%;
+    border: solid 1px rgb(134, 134, 134);
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+}
+
+.topright {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 500;
+}
+
+.logotop {
+    z-index: 500;
+    background-color: white;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.menulogotop {
+    z-index: 500;
+    background-color: white;
+    border-radius: 5px;
+    font-size: 25px;
+    font-weight: bolder;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#placeDetailOffcanvas {
+    width: 480px;
+}
+
+#shopsOffcanvas {
+    width: 480px;
+}
+
+#profileOffcanvas {
+    width: 480px;
+}
+
+#popularOffcanvas {
+    width: 480px;
+}
+
+#onlineNowOffcanvas {
+    width: 480px;
+}
+
+@media screen and (orientation:portrait) {
+    .logotop {
+        display: none;
+    }
+
+    .searchbar {
+        width: 95%
+    }
+
+    #placeDetailOffcanvas {
+        width: 100dvw;
+    }
+
+    #shopsOffcanvas {
+        width: 100dvw;
+    }
+
+    #profileOffcanvas {
+        width: 100dvw;
+    }
+
+    #popularOffcanvas {
+        width: 100dvw;
+    }
+
+    #onlineNowOffcanvas {
+        width: 100dvw;
+    }
+}
+
+@media screen and (orientation:landscape) {}
+
+.searchResult {
+    width: calc(100% - 20px);
+    min-height: 40px;
+    height: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    border-top: 1px solid rgb(182, 182, 182);
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+.searchResult:first-of-type {
+    border-top: none;
+    margin-left: 0;
+}
+
+.menuButton {
+    width: calc(100% - 20px);
+    min-height: 40px;
+    height: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    border-top: 1px solid rgb(182, 182, 182);
+    display: inline-block;
+    color: black;
+}
+
+.resultIcon {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    float: left;
+    /* Fun fact: darkgrey is lighter than grey */
+    /*background-color: darkgrey;*/
+}
+
+.resultIcon>i {
+    color: rgb(94, 94, 94);
+    --fa-primary-color: white;
+    --fa-secondary-color: grey;
+    margin-left: 20%;
+    margin-right: 50%;
+    margin-top: 15px;
+}
+
+.resultArrow>i {
+    color: rgb(94, 94, 94);
+    --fa-primary-color: white;
+    --fa-secondary-color: grey;
+    margin: 15px;
+}
+
+.resultContent {
+    /*display: inline-block;*/
+    float: left;
+}
+
+.resultArrow {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    position: relative;
+    top: 0;
+    right: 0;
+    float: inline-end;
+    margin-right: 10px;
+}
+
+.stroketext {
+    display: inline-block;
+    color: rgb(255, 255, 255);
+    font-family: "Poppins", sans-serif;
+    
+    margin-left: 3px;
+    text-shadow: -1px -1px 0 #1a1a1a, 1px -1px 0 #1a1a1a, -1px 1px 0 #1a1a1a, 1px 1px 0 #1a1a1a;
+}
+
+.mapmarkerplace {
+    width: auto !important;
+    max-width: 240px;
+    display: flex;
+    justify-content: space-between;
+    width: fit-content;
+    text-decoration: none;
+}
+
+.modal {
+    z-index: 1500;
+}
+
+.playerMarker {
+    display: flex;
+    justify-content: space-between;
+    height: 40px;
+    width: 125px;
+}
+
+.playerMarker:hover {
+    z-index: 99999;
+}
+
+.playerMarkerContent:hover {
+    z-index: 99999;
+}
+
+.playerMarkerArrow {
+    height: 16px;
+    float: left;
+}
+
+.playerMarkerContent {
+    display: flex;
+    justify-content: space-between;
+    float: left;
+    background-color: rgb(34, 34, 34);
+    color: white;
+    border-radius: 5px;
+    padding: 4px;
+    height: 40px;
+}
+
+.playerMarkerContent > * {
+    display: inline-block;
+}
+
+.playerMarkerContent > strong {
+    margin-left: 5px;
+    text-wrap:nowrap;
+}
+
+.facePortal {
+    border: 5px solid black;
+    filter: brightness(0) saturate(100%) invert(21%) sepia(83%) saturate(3195%) hue-rotate(289deg) brightness(108%) contrast(138%);
+}
+
+.playerPanel {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    border: 1px solid black;
+    z-index: 99999;
+    padding: 5px;
+    display: none;
+}
+
+#offcanvas {
+    z-index: 1600;
+}
+
+.offcanvas-backdrop {
+    z-index: 1500;
+}
+
+.menugridbuttons {
+    width: 100%;
+    margin: 16px;
+    margin-left: 0;
+}
+
+.menugriditem {
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.menugriditem > i {
+    font-size: 40px;
+}
+
+.placeDetailContent {
+    padding: 0;
+    margin: 0;
+}
+
+.placeDetailImage {
+    object-fit: cover;
+    height: 300px;
+    width: 100%;
+}
+
+.placeDetailTextContent {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.placeDetailLocation {
+    width: 100%;
+    height: 3.1em;
+    display: flex;
+    text-decoration: none;
+    color: black;
+}
+
+#searchBarCloseBtn {
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+}
+
+.hidden {
+    display: none;
+}
+
+.reviewPane {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.profilePicAvatar {
+    height: 300px;
+    width: 150px;
+    position: absolute;
+    left: 5px;
+    object-fit: contain;
+    object-position: 0px 75px;
+}
+
+.profileContent {
+    margin-left: 15px;
+    margin-right: 15px;
+    padding-top: 5px;
+}
+
+.iconInTheThing {
+    width: 20px;
+    font-size: 20px; 
+    display: inline-block; 
+    margin-right: 3px;
+}
+
+.areaMarker {
+    width: 100px !important;
+    line-break: loose;
+    word-break: keep-all;
+    text-align: center;
+}
+
+.playerInList {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid rgb(161, 161, 161);
+}
+
+.playerListBtn {
+    --bs-btn-padding-y: .1rem; 
+    --bs-btn-padding-x: .2rem; 
+    /*--bs-btn-font-size: .75rem;*/
+}
+
+.popularPlacesItem {
+    border-bottom: 1px solid rgb(161, 161, 161);
+}

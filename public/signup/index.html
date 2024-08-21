@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css" />
+    <script src="https://www.google.com/recaptcha/api.js" async defer>
+    </script>
+
+    <script>
+        function onSubmit(token) {
+            document.getElementById("demo-form").submit();
+        }
+    </script>
+
+
+
+    <style>
+        .bgCont {
+            position: absolute;
+            height: 100dvh;
+            width: 100dvw;
+            top: 0;
+            left: 0;
+        }
+
+        .bgCont2 {
+            position: absolute;
+            height: 100dvh;
+            width: 100dvw;
+            top: 100dvh;
+            left: 0;
+        }
+
+
+        .bgimg {
+            filter: brightness(70%);
+            z-index: -1;
+            position: sticky;
+            height: 100dvh;
+            width: 100dvw;
+            object-fit: cover;
+        }
+
+        @media screen and (orientation:portrait) {
+            body {
+                font-size: large;
+            }
+
+            .bgimg {
+                height: 100dvh;
+            }
+        }
+
+        @media screen and (orientation:portrait) {
+            .img-fluid {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bgCont" id="bg"><img src="../assets/images/signup_background.png" class="bgimg"></div>
+    <section id="signup" style="height: 100dvh">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-12 col-xl-11">
+                    <div class="card text-black" style="border-radius: 25px;">
+                        <div class="card-body p-md-5">
+                            <div class="row justify-content-center">
+                                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1 fs-6">
+
+                                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+
+                                    <form class="mx-1 mx-md-4" onsubmit="">
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                            <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                <input type="text" id="username" class="form-control"
+                                                    placeholder="Case sensitive. Include bedrock dot!" />
+                                                <label class="form-label" for="username">Your (exact) In-game
+                                                    name</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                                            <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                <input type="password" id="password" class="form-control"
+                                                    placeholder="I'm trusting you to make it secure!" />
+                                                <label class="form-label" for="password">Password</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                                            <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                <input type="password" id="passwordAgain" class="form-control" />
+                                                <label class="form-label" for="passwordAgain">Repeat your
+                                                    password</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="g-recaptcha" data-sitekey="6LdT8xoqAAAAAJiCbkkMg_YdGC2P76iZQ8xY6n63"
+                                            data-callback="onSubmit">
+                                        </div>
+
+
+                                        <p>By registering, you agree to the terms of service.<br><br>
+                                            You'll need to be logged into the main server in
+                                            to verify. Log in and get to the overworld *before* you click register to make verification faster!
+                                            :D</p>
+
+                                        <span id="error"></span>
+                                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                            <button id="register" type="button" data-mdb-button-init
+                                                data-mdb-ripple-init class="btn btn-primary btn-lg">Register</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                                <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+
+                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                                        class="img-fluid" alt="Sample image">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="verify" class="vh-100" style="display: none;">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-12 col-xl-11">
+                    <div class="card text-black" style="border-radius: 25px;">
+                        <div class="card-body p-md-5">
+                            <div class="row justify-content-center">
+                                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                                    <a style="cursor:pointer;"
+                                        onclick="document.querySelector('#signup').setAttribute('style', 'height: 100dvh;');document.querySelector('#verify').setAttribute('style', 'display:none;')">
+                                        < Go back</a>
+                                            <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Verify that's you
+                                            </p>
+
+                                            <div class="mx-1 mx-md-4">
+
+                                                <p>We now need to check that's you. On your <strong
+                                                        id="usernameToVerify"></strong> account,
+                                                    log in and go to these coordinates in the
+                                                    <strong>overworld</strong>:
+                                                </p>
+
+                                                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">X: <span
+                                                        id="x">0</span><br>Z: <span id="z">0</span></p>
+
+                                                <p>
+                                                <ul>
+                                                    <li>You've got 24 hours to do this.</li>
+                                                    <li>Make sure you're on those exact coordinates. Y level doesn't
+                                                        matter.</li>
+                                                    <li>If this page refreshes, just sign up again to get it back :)</li>
+                                                    <li>These coordinates have been generated <span
+                                                            id="strategy"></span>.</li>
+                                                    <li>Press the button below when you're standing there.</li>
+                                                </ul>
+
+                                                </p>
+
+                                                <span id="error2"></span>
+                                                <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                                    <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                                        class="btn btn-success btn-lg" id="verifyButton">I'm
+                                                        Here!</button>
+                                                </div>
+                                            </div>
+
+                                </div>
+                                <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+
+                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                                        class="img-fluid" alt="Sample image">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="./index.js"></script>
+</body>

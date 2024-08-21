@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PVC Mapper - Everything's right here!</title>
+    <link rel="stylesheet" type="text/css" href="./assets/leaflet/leaflet.css" />
+    <link rel="stylesheet" type="text/css" href="./assets/leaflet/leaflet.contextmenu.min.css" />
+    <link rel="stylesheet" type="text/css" href="./assets/LeafletClusters/MarkerCluster.css" />
+
+    <script src="./assets/leaflet/leaflet.js"></script>
+    <script src="./assets/leaflet/leaflet.contextmenu.min.js"></script>
+    <script src="./assets/leaflet/leafletrotate.js"> </script>
+    <script src="./assets/LeafletClusters/leaflet.markercluster.js"></script>
+    <link type="text/css" rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css" />
+    <link href="./assets/fontawesome/css/fontawesome.css" rel="stylesheet" />
+    <link href="./assets/fontawesome/css/brands.css" rel="stylesheet" />
+    <link href="./assets/fontawesome/css/solid.css" rel="stylesheet" />
+    <link type="text/css" rel="stylesheet" href="./index.css" />
+</head>
+
+<body>
+    <noscript>Hey! You'll need to enable javascript to use this website. Sorry!</noscript>
+    <!-- Searchbar -->
+    <div class="searchbar notactive">
+        <div class="searchBarInnerContainer"><a onclick="openMenuOffcanvas()" role="button"
+                aria-controls="offcanvas"><img id="localProfilePicture" src="./assets/images/steve.png"
+                    class="profileButton" /></a><input class="searchbarinput" type="text"
+                placeholder="Search for places, people, shops... 🔎" /><a class="hidden" id="searchBarCloseBtn"
+                onclick="closePlaceOffcanvas()" aria-label="Close"><i class="fa-solid fa-x"></i></a></div>
+        <hr />
+        <span class="searchbarinstructions"><strong>Try searching for:</strong>
+            <ul>
+                <li><code>Spawn</code> - Search for any place</li>
+                <li><code>User:.LarryTLlama</code> - Search for their profile</li>
+                <li><code>Item:Dirt</code> - Search for shops selling this item</li>
+                <li><code>Shop:-173, 7273</code> - Search for a shop at this location</li>
+                <li><code>Coords:1928,-173</code> - Go to coordinates on the map</li>
+            </ul>
+        </span>
+    </div>
+
+    <!--  -->
+
+    <!-- Stuff to go top right -->
+    <div class="topright">
+        <div class="logotop">
+            <img src="./assets/images/map.png" height="50" /> <span class="menulogotop">PVC Mapper</span> <br>
+            <!--<small style="font-style:italic; width: 100%; text-align: center; display: inline-block;">It's unofficial, but it's super cool!</small>-->
+        </div>
+    </div>
+
+
+    <div class="map" id="map">
+    </div>
+
+    <!-- Toast for update release notes-->
+    <div id="updateToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <!--<img src="..." class="rounded me-2" alt="...">-->
+            <strong class="me-auto">Updated to <span id="releaseNo"></span></strong>
+            <small id="releaseDate"></small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="releaseNotes">
+
+        </div>
+    </div>
+
+    <!-- Player panel bottom left -->
+    <div class="playerPanel" id="trackerPanel">
+        <h5 style="font-weight:bolder; display: inline-block;">Tracking <span id="trackerName"></span> </h5><a
+            style="cursor: pointer; margin-left: 20px;display: inline-block;" id="closetracker">Close</a>
+        <hr />
+        <span id="trackerDetails">Coordinates: 0, 0<br />
+            Dimension: Overworld<br />
+            Armour: 10/10<br />
+            Health: 5/10</span><br>
+        You're now in follow mode!<br>To move the map, close this popup.
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Player Profile</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="/api/v1/profilepicture/.LarryTLlama/default/full" width="200">
+                        </div>
+                        <div class="col-md-6">
+                            <!--
+                                profileViewName, profileViewUuid, profileViewUuidBtn, profileViewLinkBtn,
+                                profileViewLastSeen, profileViewLastLoc, profileViewLastLocBtn, 
+                                profileViewWiki, profileViewWikiBtn, profileViewDiscord,
+                                profileViewCreationTime, profileViewTimezone
+                            -->
+                            <h5 id="profileViewName">.LarryTLlama</h5>
+                            <p id="profileViewDetails">
+
+                                Last seen online: <span id="profileViewLastSeen">Online now! <button
+                                        class="btn btn-sm btn-success">Go to on map</button></span><br>
+                                Last tracked location: <span id="profileViewLastLoc">16002, -1487</span> <button
+                                    id="profileViewLastLocBtn" class="btn btn-sm btn-success">Go to on map</button><br>
+
+
+                                Mapper creation date: <span id="profileViewCreationTime">29th July 2024 @
+                                    20:05</span><br>
+                                Timezone: <span id="profileViewTimezone">BST (GMT +1) - 12 Hours behind you (Current
+                                    time is 23:33)</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="quickAddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Quick Add</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="quickAddX" class="form-label">Coordinates:</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">X:</span>
+                            <input type="number" class="form-control" placeholder="1723" id="quickAddX" />
+                            <span class="input-group-text">Z:</span>
+                            <input type="number" class="form-control" placeholder="-937" id="quickAddZ" />
+                        </div>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputPassword5" class="form-label">Type</label>
+                        <select class="form-select" id="quickAddType">
+                            <option disabled></option>
+                            <option value="portal">Portal</option>
+                            <option value="echest">Ender Chest</option>
+                            <option value="portalandechest">Portal and Ender Chest</option>
+                        </select>
+                        <small class="form-text">You can only quick-add these types. To add more, use the <a
+                                href="/create">Map Editor</a></small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputPassword5" class="form-label">Name</label>
+                        <input type="text" id="quickAddName" class="form-control" aria-describedby="passwordHelpBlock">
+                        <small class="form-text">Optional name</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="quickAdd()">Save to map</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">PVCMapper Login</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4>Log in with the PVC Mapper</h4>
+                    <p>And get your places added to the map!</p><br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a href="/signup"><button type="button" class="btn btn-primary">Sign up</button></a>
+                    <a href="/login"><button type="button" class="btn btn-primary">Log In</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- First welcome Modal -->
+    <div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Welcome to the PVC Mapper!</h1>
+                </div>
+                <div class="modal-body">
+                    <div style="width: 100%; display: flex; justify-content: center;">
+                        <img width="50%" src="./assets/images/WelcomeToMapper.png">
+                    </div><br>
+                    <p><strong>Welcome to the PVC Mapper!</strong><br>
+                        Firstly, a little disclaimer just to let you know that this website isn't officially endorsed or
+                        created by the main server.<br>
+                        I should probably also let you know that we're talking about Larry's servers, that aren't exactly supercomputers. They might be slow, or crash sometimes. I'll try my best to keep them working <3<br>
+                        If you want to know more about your data on the PVC Mapper, or if you ever get stuck, check out
+                        the <a href="/help">help pages</a> for more info :)<br>If you get *super* stuck, feel free to
+                        ask <code>@larrytllama</code> on discord/in game about anything!<br><br>
+                        Click "next" for a quick starter guide, or click "skip" if you're adventurous.
+                    </p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Skip</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#welcomeGuideModal">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guide welcome Modal -->
+    <div class="modal fade" id="welcomeGuideModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Welcome to the PVC Mapper!</h1>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Searching for places, shops, loads of things...</strong><br>
+                        Use the searchbar at the top left to search for things.. <br>
+                        You can also use the filters to choose what you see on the map. Shops and portals only show if
+                        you zoom in enough!
+                    <div style="width: 100%; display: flex; justify-content: center;">
+                        <img width="50%" src="./assets/images/Searchbar.png">
+                    </div><br><br>
+                    <strong>Not on the mapper yet? DIY!</strong><br>
+                    Click the profile picture in the searchbar to open your menu (it'll be a steve to start with).<br>
+                    Click "Add a Place" in the menu to add your favourite locations and areas!<br>
+                    You'll need to sign up using your in-game username, then set a (unique) password.<br>
+                    Make sure you're in-game, as this will make account verification much easier!<br>
+                    <div style="width: 100%; display: flex; justify-content: center;">
+                        <img width="50%" src="./assets/images/AddArea.png">
+                    </div><br><br>
+                    <strong>Shopping's just been made *so* much easier.</strong><br>
+                    Search for "Item:[item name]" or click on a shop on the map to bring up trades based on your
+                    search.<br>
+                    Items are ordered by the best price, so get the top trades while you still can!<br>
+                    <div style="width: 100%; display: flex; justify-content: center;">
+                        <img width="50%" src="./assets/images/ShopsSearch.png">
+                    </div><br><br>
+                    <strong>Add the little details quickly!</strong><br>
+                    Right click anywhere on the map and choose "Quick Add here" in the menu.<br>
+                    Then choose if it's a portal, ender chest or both. Give it a name, and add it!<br>
+                    <div style="width: 100%; display: flex; justify-content: center;">
+                        <img width="50%" src="./assets/images/QuickAdd.png">
+                    </div><br><br>
+                    <strong>Customize your own profile to share with the world!</strong><br>
+                    Setup details on your public profile, including unions, timezones, plus wiki and discord
+                    usernames.<br>
+                    Only add the info that you want *everyone* to see. Search for others' profiles using
+                    "User:[In-game-name]"!<br>
+                    <div style="width: 100%; display: flex; justify-content: center;">
+                        <img width="50%" src="./assets/images/MyProfile.png">
+                    </div><br><br>
+                    There's loads more, but we'll let you discover those features! Happy mapping! 🗺️
+                    </p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Offcanvas place details pane -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="placeDetailOffcanvas" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-body placeDetailContent">
+            <img class="placeDetailImage" id="placeDetailImg" height="400"
+                onerror="document.getElementById('placeDetailImg').src='/assets/images/ImagePlaceholder.png'">
+            <div class="placeDetailTextContent" id="placeInfo">
+
+            </div>
+            <hr style="margin-top: 15px; margin-bottom: 15px;" />
+            <div class="reviewPane">
+                <span>
+                    <h5 style="font-weight: bolder; margin-top: 15px; margin-bottom: 3px; display: inline-block;">
+                        Reviews</h5> <small style="display: inline-block;"><span id="numberOfReviews"></span>
+                        Post(s)</small>
+                </span>
+                <div style="display: flex">
+                    <input style="flex: 0.8" class="reviewInput" id="reviewInput" type="text"
+                        placeholder="Write your own review..." />
+                    <button onclick="postReview()" style="flex: 0.2" class="btn btn-sm btn-success" i
+                        id="postReviewBtn">Post Review</button>
+                </div><br>
+                <div class="reviewsList" id="reviewsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Offcanvas shops pane -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="shopsOffcanvas" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-body placeDetailContent" style="padding-top: 60px;">
+            <span>
+                <h5
+                    style="margin-left: 15px; font-weight: bolder; margin-top: 15px; margin-bottom: 3px; display: inline-block;">
+                    Shops Search </h5><small style="margin-left: 10px;">Powered by <a
+                        href="https://pvc-utils.xyz">pvc-utils.xyz</a></small>
+                <small style="margin-left: 15px; display: inline-block;"><span id="numberOfTrades">0</span> Trade(s)
+                    found with query: <strong id="tradeSearchQuery"></strong></small>
+            </span><br>
+            <hr style="margin-bottom: 5px; margin-top: 5px;" />
+            <div class="placeDetailTextContent" id="tradesList"></div>
+        </div>
+    </div>
+
+    <!-- Offcanvas popular places pane -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="popularOffcanvas" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-body placeDetailContent" style="padding-top: 60px;">
+            <span>
+                <h5
+                    style="margin-left: 15px; font-weight: bolder; margin-top: 15px; margin-bottom: 3px; display: inline-block;">
+                    Places </h5><small style="margin-left: 10px;">The top 25, ordered by No. of hits.</small>
+            </span><br>
+            <hr style="margin-bottom: 5px; margin-top: 5px;" />
+            <div class="placeDetailTextContent" id="placesList">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Offcanvas online now pane -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="onlineNowOffcanvas" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-body placeDetailContent" style="padding-top: 60px;">
+            <span>
+                <h5
+                    style="margin-left: 15px; font-weight: bolder; margin-top: 15px; margin-bottom: 3px; display: inline-block;">
+                    Online Now </h5>
+                <small style="margin-left: 15px; display: inline-block;"> 🟢 <span id="numberOfPlayersOnline">0</span>/40
+                    Player(s) online now!</small>
+            </span><br>
+            <hr style="margin-bottom: 5px; margin-top: 5px;" />
+            <div class="placeDetailTextContent" id="playerList">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Offcanvas profile pane -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="profileOffcanvas" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-body placeDetailContent">
+            <img class="placeDetailImage" id="profileBGImage" height="400"
+                src='/assets/images/profileBackgrounds/FurnaceValley.jpg'>
+            <img class="profilePicAvatar" id="profileAvatar" height="400" width="250">
+            <div class="profileContent" id="profileContent">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Offcanvas settings pane -->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="settingsOffcanvas" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-body placeDetailContent" style="padding-top: 60px;">
+            <span>
+                <h5
+                    style="margin-left: 15px; font-weight: bolder; margin-top: 15px; margin-bottom: 3px; display: inline-block;">
+                    Settings </h5>
+                <small>
+
+                </small>
+            </span><br>
+            <hr style="margin-bottom: 5px; margin-top: 5px;" />
+            <div class="placeDetailTextContent" id="tradesList"></div>
+        </div>
+    </div>
+
+    <!-- Offcanvas sidebar -->
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header menulogotop">
+            <img src="./assets/images/map.png" height="50" style="margin-right: 5px;" /> PVC Mapper <span
+                style="margin-left: 5px;" class="badge text-bg-primary">BETA</span>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button><br>
+        </div>
+        <div class="offcanvas-body">
+            <span style="margin-top: -15px;" id="menuGreeting">Hey there, <strong>.LarryTLlama</strong>! <a
+                    href="/logout">Log
+                    out?</a></span>
+
+            <table class="menugridbuttons">
+                <tr>
+                    <td onclick="shopsByLiterallyNoFilterWhatsoever()" class="menugriditem">
+                        <i class="fa-solid fa-bag-shopping"></i><br>
+                        <span>Shopping</span>
+                    </td>
+                    <td onclick="location.href='/create'" class="menugriditem">
+                        <i class="fa-solid fa-map-location"></i><br>
+                        <span>Add a place</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td onclick="openOnlineNowOffcanvas()" class="menugriditem">
+                        <i class="fa-solid fa-users-rectangle"></i><br>
+                        <span>Online Now</span>
+                    </td>
+                    <td onclick="placesByPopularity()" class="menugriditem">
+                        <i class="fa-solid fa-chart-line"></i><br>
+                        <span>Popular</span>
+                    </td>
+                </tr>
+            </table>
+            <div class="">
+                <!-- Reusing some searchResult stuff in the menu because I'm lazy :) -->
+                <span style="color: red;" class="menuButton">
+                    <div class="form-check form-switch">
+                        <input
+                            onchange="switchDimension(document.getElementById('dimensionToggleSwitch').checked ? 'nether' : 'overworld')"
+                            class="form-check-input" type="checkbox" role="switch" id="dimensionToggleSwitch">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Nether Mode</label>
+                    </div>
+
+                </span>
+                <a href="/create" class="menuButton">
+                    <span class="resultIcon"><i class="fa-solid fa-location-dot"></i></span>
+                    <p class="resultContent"><strong>Add A Place</strong><br><small>Add a location or area to the
+                            map!</small>
+                    </p><span class="resultArrow"><i class="fa-solid fa-circle-chevron-right"></i></span>
+                </a>
+                <a onclick="openQuickAdd()" data-bs-dismiss="offcanvas" class="menuButton">
+                    <span class="resultIcon"><i class="fa-solid fa-square-plus"></i></span>
+                    <p class="resultContent"><strong>Quick Add</strong><br><small>Add portals and ender chests
+                            quickly</small>
+                    </p><span class="resultArrow"><i class="fa-solid fa-circle-chevron-right"></i></span>
+                </a>
+                <a class="menuButton" onclick="openOnlineNowOffcanvas()">
+                    <span class="resultIcon"><i class="fa-solid fa-users-rectangle"></i></span>
+                    <p class="resultContent"><strong>Online Now</strong><br><small>See who's on now!</small>
+                    </p><span class="resultArrow"><i class="fa-solid fa-circle-chevron-right"></i></span>
+                </a>
+                <a class="menuButton" href="https://pvcstatus.vercel.app/">
+                    <span class="resultIcon"><i class="fa-solid fa-server"></i></span>
+                    <p class="resultContent"><strong>Server Status</strong><br><small>Live online/offline
+                            tracker</small>
+                    </p><span class="resultArrow"><i class="fa-solid fa-circle-chevron-right"></i></span>
+                </a>
+
+                <a data-bs-dismiss="offcanvas" onclick="window.loadProfile(localStorage.getItem('localuuid'))"
+                    class="menuButton">
+                    <span class="resultIcon"><i class="fa-solid fa-id-card"></i></span>
+                    <p class="resultContent"><strong>My Profile</strong><br><small>Edit your public details</small>
+                    </p><span class="resultArrow"><i class="fa-solid fa-circle-chevron-right"></i></span>
+                </a>
+                <span class="menuButton">
+                    <span class="resultIcon"><i class="fa-solid fa-user-gear"></i></span>
+                    <p class="resultContent"><strong>Settings</strong><br><small><span class="badge text-bg-info">Coming
+                                soon!</span>
+                            Change theme + more!</small>
+                    </p><span class="resultArrow"><i class="fa-solid fa-circle-chevron-right"></i></span>
+                </span>
+                <!--<span class="menuButton">
+                    <span class="resultIcon"><i class="fa-solid fa-file-circle-exclamation"></i></span>
+                    <p class="resultContent"><strong>Report an issue</strong><br><small>Contact us about the
+                            mapper</small>
+                    </p><span class="resultArrow"><i class="fa-solid fa-circle-chevron-right"></i></span>
+                </span>-->
+                <a href="/help" class="menuButton">
+                    <span class="resultIcon"><i class="fa-solid fa-question"></i></span>
+                    <p class="resultContent"><strong>Help/About</strong><br><small>Tutorials and other info</small>
+                    </p><span class="resultArrow"><i class="fa-solid fa-circle-chevron-right"></i></span>
+                </a>
+                <br><br>
+                <hr />
+                <small><strong>Other cool PVC websites:</strong></small><br>
+                <ul>
+                    <li><a href="https://peacefulvanilla.club">Central PVC Website</a> (Official)</li>
+                    <li><a href="https://pvc-utils.xyz">_Easter's PVC Utilities</a></li>
+                    <li><a href="https://peaceful-vanilla-club.fandom.com/wiki/Peaceful_Vanilla_Club_Wiki">Peaceful
+                            Vanilla Club Wiki</a> (Official)</li>
+                    <li><a href="https://li-map.vercel.app">Llama Iceways Interactive Map</a></li>
+                    <li><a href="https://lcu-website.vercel.app">LCU Website</a></li>
+                </ul>
+                Know your way around javascript? <a href="https://github.com/LarryTLlama/PVCMapper">Check out the code</a>
+                <span>An unofficial site, made with ♥️ by LarryTLlama</span>
+            </div>
+        </div>
+    </div>
+    <script src="./assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="./script.js" async="true"></script>
+</body>
+
+</html>
